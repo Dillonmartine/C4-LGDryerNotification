@@ -1,0 +1,2 @@
+thinqconnect==1.0.14
+aiohttp>=3.9,<4

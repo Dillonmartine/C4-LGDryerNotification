@@ -1,0 +1,34 @@
+services:
+  laundry-bridge:
+    build: .
+    image: laundry-bridge:latest
+    container_name: laundry-bridge
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      THINQ_PAT_FILE: /run/secrets/thinq_pat
+      C4_SECRET_FILE: /run/secrets/c4_secret
+    secrets:
+      - thinq_pat
+      - c4_secret
+    volumes:
+      - laundry-data:/data
+    read_only: true
+    tmpfs:
+      - /tmp
+    cap_drop: [ALL]
+    security_opt:
+      - no-new-privileges:true
+    mem_limit: 256m
+    logging:
+      driver: json-file
+      options: { max-size: "5m", max-file: "3" }
+
+secrets:
+  thinq_pat:
+    file: ./secrets/thinq_pat
+  c4_secret:
+    file: ./secrets/c4_secret
+
+volumes:
+  laundry-data:
